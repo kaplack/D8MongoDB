@@ -1,0 +1,52 @@
+# Crear base de datos
+use ecommerce
+
+# Crea coleccion
+db.mensajes.insert({user: 'Alan', msg:'Hola bienvenido', date: ISODate()})
+
+# Crea coleccion productos
+db.productos.insertMany([
+    {name: 'Tijera', description:'tijera punta roma', code: 1, thumbnail:'/tijera.jpg', precio: 800,  date: ISODate()},
+    {name: 'Borrador', description:'borrador de goma', code: 2, thumbnail:'/borrador.jpg', precio: 500,  date: ISODate()},
+    {name: 'Lapicero', description:'lapicero de tinta liquida', code: 3, thumbnail:'/lapicero.jpg', precio: 1500,  date: ISODate()},
+    {name: 'Escuadra', description:'Escuadra metalica', code: 4, thumbnail:'/Escuadra.jpg', precio: 3800,  date: ISODate()},
+    {name: 'Compas', description:'Compas arquitecto', code: 5, thumbnail:'/compas.jpg', precio: 4900,  date: ISODate()},
+    {name: 'Calculadora', description:'Calculadora casio', code: 6, thumbnail:'/calculadora.jpg', precio: 4500,  date: ISODate()},
+    {name: 'PapelA4', description:'Medio millar de papel', code: 7, thumbnail:'/papel.jpg',precio: 1800,  date: ISODate()},
+    {name: 'Cuaderno', description:'Cuaderno A4', code: 8, thumbnail:'/cuaderno.jpg',precio: 2500,  date: ISODate()},
+    {name: 'Lapiz', description:'Docena de lapiz', code: 9, thumbnail:'/lapiz.jpg',precio: 1200,  date: ISODate()},
+    {name: 'Mochila', description:'Mochial jamsport', code: 10, thumbnail:'/mochila.jpg',precio: 5000, date: ISODate()},
+    ])
+
+# listar documentos
+db.mensajes.find()
+db.productos.find()
+
+# cantidad de docs
+db.mensajes.countDocuments()
+db.productos.countDocuments()
+
+#productos precios menores de 1000
+db.productos.find({precio:{$lt:1000}})
+
+#productos precios entre 1000 y 3000
+db.productos.find({$and:[{precio:{$gt:1000}}, {precio:{$lt:3000}}]})
+
+#productos precios mayores de 3000
+db.productos.find({precio:{$gt:3000}})
+
+#producto tercer producto mas barato
+db.productos.find({}).sort({precio: 1}).skip(3).limit(1)
+
+#producto agregar stock 100
+db.productos.update({},{$set:{stock: 100}},{multi: true})
+
+#productos cambiar stock a 0 de precios mayores a 4000
+db.productos.update({precio:{$gt:4000}},{$set:{stock:0}},{multi: true})
+
+#borrar productos menores de 1000
+db.productos.deleteMany({precio:{$lt:1000}})
+
+#Crear usuario pepe
+use admin
+db.createUser({user: 'pepe', pwd:'asd456', roles:[{role:'read', db:'ecommerce'}]})
